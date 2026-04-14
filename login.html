@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Traffic Enforcement Management System</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    /* ===== Forgot Password Modal ===== */
+    .fp-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,16,24,0.6); z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .fp-overlay.open { display: flex; }
+    .fp-modal {
+      background: #fff; border-radius: 16px; padding: 36px 32px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25); position: relative;
+    }
+    .fp-modal-title { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 6px; }
+    .fp-modal-sub   { font-size: 14px; color: var(--text-light); margin-bottom: 24px; }
+    .fp-close {
+      position: absolute; top: 16px; right: 18px;
+      background: none; border: none; font-size: 26px;
+      color: var(--text-light); cursor: pointer; line-height: 1;
+    }
+    .fp-step { display: none; }
+    .fp-step.active { display: block; }
+    .fp-input-group { margin-bottom: 18px; }
+    .fp-input-group label { font-size: 13px; font-weight: 600; color: var(--text-medium); display: block; margin-bottom: 6px; }
+    .fp-input {
+      width: 100%; box-sizing: border-box;
+      border: 1.5px solid #d1d5db; border-radius: 8px;
+      padding: 11px 14px; font-size: 14px; color: var(--text-dark);
+      outline: none; transition: border-color .2s;
+    }
+    .fp-input:focus { border-color: var(--primary); }
+    .fp-btn {
+      width: 100%; padding: 13px; background: var(--primary);
+      color: #fff; border: none; border-radius: 8px;
+      font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
+      transition: background .2s;
+    }
+    .fp-btn:hover { background: var(--primary-dark); }
+    .fp-msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+    .fp-msg.error   { background: #fee2e2; color: #dc2626; border-left: 3px solid #dc2626; display: block; }
+    .fp-msg.success { background: #dcfce7; color: #16a34a; border-left: 3px solid #16a34a; display: block; }
+    .fp-resend { font-size: 12px; color: var(--text-light); text-align: right; margin-top: 8px; }
+    .fp-resend a { color: var(--primary); cursor: pointer; text-decoration: underline; }
+    .fp-success-icon { font-size: 52px; text-align: center; margin-bottom: 14px; }
+    /* Logo image */
+    .seal-img {
+      width: 160px; height: 160px;
+      object-fit: contain; border-radius: 50%;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+    }
+    @media(max-width:768px){ .seal-img { width: 110px; height: 110px; } }
+  </style>
+</head>
+<body class="auth-body">
+
+  <div class="auth-container">
+
+    <!-- LEFT PANEL: Login Form -->
+    <div class="auth-form-panel">
+      <div class="auth-form-wrapper">
+
+        <h1 class="auth-title">Welcome!</h1>
+        <p class="auth-subtitle">Sign in to your account</p>
+
+        <p class="auth-label">Choose account type.</p>
+        <div class="role-radio-group">
+          <label class="role-radio">
+            <input type="radio" name="loginRole" value="Admin" checked />
+            <span class="radio-circle"></span>
+            <span class="radio-text">Admin</span>
+          </label>
+          <label class="role-radio">
+            <input type="radio" name="loginRole" value="Staff" />
+            <span class="radio-circle"></span>
+            <span class="radio-text">Staff</span>
+          </label>
+          <label class="role-radio">
+            <input type="radio" name="loginRole" value="Enforcer" />
+            <span class="radio-circle"></span>
+            <span class="radio-text">Enforcer</span>
+          </label>
+        </div>
+
+        <div class="auth-input-group">
+          <input type="text" id="loginId" class="auth-input" placeholder="ID Number" autocomplete="username"/>
+        </div>
+
+        <div class="auth-input-group">
+          <input type="password" id="loginPassword" class="auth-input" placeholder="Password" autocomplete="current-password"/>
+        </div>
+
+        <div class="auth-forgot">
+          <!-- CHANGE 4: Forgot password now opens functional modal -->
+          <a href="#" class="forgot-link" onclick="openForgotPassword(event)">Forgot Password?</a>
+        </div>
+
+        <div id="loginError" class="auth-error" style="display:none;"></div>
+
+        <button class="auth-btn" id="loginBtn" onclick="handleLogin()">LOGIN</button>
+
+        <p class="auth-switch">
+          Don't have an account?
+          <a href="register.html" class="auth-link">Register here</a>
+        </p>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Hero -->
+    <div class="auth-hero-panel hero-right">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <!-- CHANGE 5: Updated to use new logo image from assets/ -->
+        <div class="tmeo-seal">
+          <img
+            src="assets/logo.png"
+            alt="TMEO Lucena City Seal"
+            class="seal-img"
+            onerror="this.style.display='none'; document.getElementById('fallbackSeal').style.display='block';"
+          />
+          <svg id="fallbackSeal" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="seal-svg" style="display:none;">
+            <circle cx="100" cy="100" r="98" fill="#FFB800"/>
+            <circle cx="100" cy="100" r="82" fill="#87CEEB"/>
+            <rect x="96" y="55" width="8" height="90" fill="#222" rx="3"/>
+            <rect x="75" y="52" width="50" height="95" rx="8" fill="#111"/>
+            <circle cx="100" cy="72" r="14" fill="#FF3333"/>
+            <circle cx="100" cy="100" r="14" fill="#FFB800"/>
+            <circle cx="100" cy="128" r="14" fill="#22CC44"/>
+          </svg>
+        </div>
+        <h2 class="hero-title">Traffic Enforcement<br/>Management System</h2>
+        <p class="hero-subtitle">Traffic Management and Enforcement Office</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== FORGOT PASSWORD MODAL (Change 4) ===== -->
+  <div class="fp-overlay" id="fpOverlay">
+    <div class="fp-modal">
+      <button class="fp-close" onclick="closeForgotPassword()">×</button>
+
+      <!-- Step 1: Email Input -->
+      <div class="fp-step active" id="fpStep1">
+        <div class="fp-modal-title">Forgot Password</div>
+        <div class="fp-modal-sub">Enter your registered email address and we'll send you a verification code.</div>
+        <div id="fpMsg1" class="fp-msg" style="display:none;"></div>
+        <div class="fp-input-group">
+          <label>Email Address</label>
+          <input type="email" id="fpEmail" class="fp-input" placeholder="you@example.com"/>
+        </div>
+        <button class="fp-btn" onclick="fpSendCode()">Send Verification Code</button>
+      </div>
+
+      <!-- Step 2: Verify Code -->
+      <div class="fp-step" id="fpStep2">
+        <div class="fp-modal-title">Verify Your Code</div>
+        <div class="fp-modal-sub" id="fpStep2Sub">Enter the 6-digit code sent to your email.</div>
+        <div id="fpMsg2" class="fp-msg" style="display:none;"></div>
+        <div class="fp-input-group">
+          <label>6-Digit Verification Code</label>
+          <input type="text" id="fpCode" class="fp-input" placeholder="000000" maxlength="6"
+            style="text-align:center;font-size:24px;font-weight:700;letter-spacing:8px;"/>
+          <div class="fp-resend">Didn't receive it? <a onclick="fpResendCode()">Resend Code</a></div>
+        </div>
+        <button class="fp-btn" onclick="fpVerifyCode()">Verify Code</button>
+      </div>
+
+      <!-- Step 3: New Password -->
+      <div class="fp-step" id="fpStep3">
+        <div class="fp-modal-title">Set New Password</div>
+        <div class="fp-modal-sub">Choose a strong password for your account.</div>
+        <div id="fpMsg3" class="fp-msg" style="display:none;"></div>
+        <div class="fp-input-group">
+          <label>New Password</label>
+          <input type="password" id="fpNewPass" class="fp-input" placeholder="At least 6 characters"/>
+        </div>
+        <div class="fp-input-group">
+          <label>Confirm New Password</label>
+          <input type="password" id="fpConfirmPass" class="fp-input" placeholder="Repeat password"/>
+        </div>
+        <button class="fp-btn" onclick="fpResetPassword()">Reset Password</button>
+      </div>
+
+      <!-- Step 4: Success -->
+      <div class="fp-step" id="fpStep4">
+        <div class="fp-success-icon">✅</div>
+        <div class="fp-modal-title" style="text-align:center;">Password Reset Successful!</div>
+        <div class="fp-modal-sub" style="text-align:center;">Your password has been updated. You can now log in with your new password.</div>
+        <button class="fp-btn" onclick="closeForgotPassword()" style="margin-top:12px;">Return to Login</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    seedDefaultAccounts();
+
+    // ===== FORGOT PASSWORD LOGIC =====
+    let _fpEmail = '';
+    let _fpCode  = '';
+    let _fpVerified = false;
+
+    function openForgotPassword(e) {
+      e.preventDefault();
+      _fpEmail = ''; _fpCode = ''; _fpVerified = false;
+      document.getElementById('fpOverlay').classList.add('open');
+      fpGoStep(1);
+    }
+
+    function closeForgotPassword() {
+      document.getElementById('fpOverlay').classList.remove('open');
+      ['fpEmail','fpCode','fpNewPass','fpConfirmPass'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      ['fpMsg1','fpMsg2','fpMsg3'].forEach(id => {
+        fpHideMsg(id);
+      });
+    }
+
+    function fpGoStep(n) {
+      document.querySelectorAll('.fp-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('fpStep' + n).classList.add('active');
+    }
+
+    function fpShowMsg(id, type, msg) {
+      const el = document.getElementById(id);
+      el.className = 'fp-msg ' + type;
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function fpHideMsg(id) {
+      const el = document.getElementById(id);
+      if (el) { el.className = 'fp-msg'; el.textContent = ''; el.style.display = 'none'; }
+    }
+
+    function fpSendCode() {
+      fpHideMsg('fpMsg1');
+      const email = document.getElementById('fpEmail').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        fpShowMsg('fpMsg1', 'error', 'Please enter a valid email address.');
+        return;
+      }
+      const users = Storage.getUsers();
+      const user  = users.find(u => u.email === email);
+      if (!user) {
+        fpShowMsg('fpMsg1', 'error', 'No account was found with this email address.');
+        return;
+      }
+      _fpEmail = email;
+      _fpCode  = String(Math.floor(100000 + Math.random() * 900000));
+      sessionStorage.setItem('tmeo_fp_code',    _fpCode);
+      sessionStorage.setItem('tmeo_fp_email',   _fpEmail);
+      sessionStorage.setItem('tmeo_fp_expires', String(Date.now() + 10 * 60 * 1000));
+
+      // In production, send email via backend. In demo, log to console.
+      console.info('[TMEO Reset] Code for ' + email + ': ' + _fpCode);
+
+      document.getElementById('fpStep2Sub').textContent =
+        'A verification code has been sent to ' + email +
+        '. (Demo: view code in browser console — F12 → Console)';
+      fpGoStep(2);
+    }
+
+    function fpResendCode() {
+      _fpCode = String(Math.floor(100000 + Math.random() * 900000));
+      sessionStorage.setItem('tmeo_fp_code',    _fpCode);
+      sessionStorage.setItem('tmeo_fp_expires', String(Date.now() + 10 * 60 * 1000));
+      console.info('[TMEO Reset] Resent code for ' + _fpEmail + ': ' + _fpCode);
+      fpShowMsg('fpMsg2', 'success', 'New code generated. Check browser console (F12 → Console).');
+    }
+
+    function fpVerifyCode() {
+      fpHideMsg('fpMsg2');
+      const entered  = document.getElementById('fpCode').value.trim();
+      const stored   = sessionStorage.getItem('tmeo_fp_code');
+      const expires  = parseInt(sessionStorage.getItem('tmeo_fp_expires') || '0');
+
+      if (Date.now() > expires) {
+        fpShowMsg('fpMsg2', 'error', 'This code has expired. Please request a new one.');
+        return;
+      }
+      if (entered !== stored) {
+        fpShowMsg('fpMsg2', 'error', 'Incorrect code. Please try again.');
+        return;
+      }
+      _fpVerified = true;
+      fpGoStep(3);
+    }
+
+    function fpResetPassword() {
+      fpHideMsg('fpMsg3');
+      if (!_fpVerified) { fpGoStep(1); return; }
+      const newPass = document.getElementById('fpNewPass').value;
+      const confirm = document.getElementById('fpConfirmPass').value;
+      if (newPass.length < 6) {
+        fpShowMsg('fpMsg3', 'error', 'Password must be at least 6 characters.');
+        return;
+      }
+      if (newPass !== confirm) {
+        fpShowMsg('fpMsg3', 'error', 'Passwords do not match. Please re-enter.');
+        return;
+      }
+      const email = sessionStorage.getItem('tmeo_fp_email');
+      const users = Storage.getUsers();
+      const user  = users.find(u => u.email === email);
+      if (!user) {
+        fpShowMsg('fpMsg3', 'error', 'Session expired. Please restart the process.');
+        return;
+      }
+      user.password = newPass;
+      Storage.updateUser(user);
+      sessionStorage.removeItem('tmeo_fp_code');
+      sessionStorage.removeItem('tmeo_fp_email');
+      sessionStorage.removeItem('tmeo_fp_expires');
+      _fpVerified = false;
+      fpGoStep(4);
+    }
+
+    // Close on backdrop click
+    document.getElementById('fpOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeForgotPassword();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – Traffic Enforcement Management System</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body class="auth-body">
+
+  <!-- ===================== REGISTER PAGE LAYOUT ===================== -->
+  <!-- Left Panel: Hero Image | Right Panel: Form (mirrored from login) -->
+  <div class="auth-container">
+
+    <!-- ===== LEFT PANEL: Hero ===== -->
+    <div class="auth-hero-panel hero-left">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <!-- TMEO Seal -->
+        <div class="tmeo-seal">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="seal-svg">
+            <circle cx="100" cy="100" r="98" fill="#FFB800" />
+            <circle cx="100" cy="100" r="82" fill="#87CEEB" />
+            <rect x="96" y="55" width="8" height="90" fill="#222" rx="3"/>
+            <rect x="75" y="52" width="50" height="95" rx="8" fill="#111"/>
+            <circle cx="100" cy="72" r="14" fill="#FF3333"/>
+            <circle cx="100" cy="72" r="10" fill="#FF6666" opacity="0.7"/>
+            <circle cx="100" cy="100" r="14" fill="#FFB800"/>
+            <circle cx="100" cy="100" r="10" fill="#FFD700" opacity="0.7"/>
+            <circle cx="100" cy="128" r="14" fill="#22CC44"/>
+            <circle cx="100" cy="128" r="10" fill="#44EE66" opacity="0.7"/>
+            <path id="topArc2" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+            <text font-size="11" font-weight="700" fill="#1a1a2e" font-family="Arial, sans-serif" letter-spacing="2">
+              <textPath href="#topArc2" startOffset="5%">TRAFFIC MANAGEMENT &amp; ENFORCEMENT</textPath>
+            </text>
+            <path id="botArc2" d="M 18,100 A 82,82 0 0,0 182,100" fill="none"/>
+            <text font-size="12" font-weight="700" fill="#1a1a2e" font-family="Arial, sans-serif" letter-spacing="2">
+              <textPath href="#botArc2" startOffset="22%">LUCENA CITY</textPath>
+            </text>
+            <text x="100" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#1a1a2e" font-family="Arial, sans-serif" letter-spacing="1">OFFICE</text>
+          </svg>
+        </div>
+        <h2 class="hero-title">Traffic Enforcement<br/>Management System</h2>
+        <p class="hero-subtitle">Traffic Management and Enforcement Office</p>
+      </div>
+    </div>
+
+    <!-- ===== RIGHT PANEL: Register Form ===== -->
+    <div class="auth-form-panel">
+      <div class="auth-form-wrapper">
+
+        <h1 class="auth-title">Welcome!</h1>
+        <p class="auth-subtitle">Register here</p>
+
+        <!-- Role Selection -->
+        <p class="auth-label">Choose account type.</p>
+        <div class="role-radio-group">
+          <label class="role-radio">
+            <input type="radio" name="registerRole" value="Admin" checked />
+            <span class="radio-circle"></span>
+            <span class="radio-text">Admin</span>
+          </label>
+          <label class="role-radio">
+            <input type="radio" name="registerRole" value="Staff" />
+            <span class="radio-circle"></span>
+            <span class="radio-text">Staff</span>
+          </label>
+          <label class="role-radio">
+            <input type="radio" name="registerRole" value="Enforcer" />
+            <span class="radio-circle"></span>
+            <span class="radio-text">Enforcer</span>
+          </label>
+        </div>
+
+        <!-- ID Number -->
+        <div class="auth-input-group">
+          <input
+            type="text"
+            id="regId"
+            class="auth-input"
+            placeholder="ID Number"
+          />
+        </div>
+
+        <!-- Full Name -->
+        <div class="auth-input-group">
+          <input
+            type="text"
+            id="regName"
+            class="auth-input"
+            placeholder="Full Name"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="auth-input-group">
+          <input
+            type="email"
+            id="regEmail"
+            class="auth-input"
+            placeholder="Email Address"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="auth-input-group">
+          <input
+            type="tel"
+            id="regPhone"
+            class="auth-input"
+            placeholder="Phone Number"
+          />
+        </div>
+
+        <!-- Create Password -->
+        <div class="auth-input-group">
+          <input
+            type="password"
+            id="regPassword"
+            class="auth-input"
+            placeholder="Create Password"
+          />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="auth-input-group">
+          <input
+            type="password"
+            id="regConfirm"
+            class="auth-input"
+            placeholder="Confirm Password"
+          />
+        </div>
+
+        <!-- Error / Success Message -->
+        <div id="registerError" class="auth-error" style="display:none;"></div>
+        <div id="registerSuccess" class="auth-success" style="display:none;"></div>
+
+        <!-- Signup Button -->
+        <button class="auth-btn" onclick="handleRegister()">
+          SIGNUP
+        </button>
+
+        <!-- Login Link -->
+        <p class="auth-switch">
+          Already have account?
+          <a href="login.html" class="auth-link">Login</a>
+        </p>
+
+      </div>
+    </div>
+
+  </div><!-- end auth-container -->
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Staff Dashboard – TMEO Lucena City</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/sidebar.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <!-- CHANGE 5: Updated logo -->
+      <img src="assets/logo.png" alt="TMEO" style="width:36px;height:36px;border-radius:50%;object-fit:contain;"
+           onerror="this.style.display='none'; document.getElementById('staffSidebarLogoFallback').style.display='block';"/>
+      <svg id="staffSidebarLogoFallback" viewBox="0 0 200 200" class="sidebar-logo" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <circle cx="100" cy="100" r="98" fill="#FFB800"/>
+        <circle cx="100" cy="100" r="82" fill="#87CEEB"/>
+        <rect x="75" y="52" width="50" height="95" rx="8" fill="#111"/>
+        <circle cx="100" cy="72"  r="14" fill="#FF3333"/>
+        <circle cx="100" cy="100" r="14" fill="#FFB800"/>
+        <circle cx="100" cy="128" r="14" fill="#22CC44"/>
+      </svg>
+      <div class="sidebar-brand">
+        <span class="sidebar-brand-name">TMEO</span>
+        <span class="sidebar-brand-sub">Lucena City</span>
+      </div>
+    </div>
+    <div class="sidebar-role-badge">ASSESSMENT STAFF</div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item" data-page="encode" onclick="showPage('encode')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </span>
+        <span class="nav-label">Encode Violation</span>
+      </a>
+      <a class="nav-item" data-page="violations" onclick="showPage('violations')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </span>
+        <span class="nav-label">Violation Records</span>
+      </a>
+      <a class="nav-item" data-page="receipts" onclick="showPage('receipts')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+        </span>
+        <span class="nav-label">E-Receipts</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="handleLogout()">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </span>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div class="topbar-left">
+          <div class="topbar-title">Traffic Enforcement Management System</div>
+          <div class="topbar-sub">Integrated Web-Based Violation Management • Lucena City</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user">
+          <div class="user-info" style="text-align:right;">
+            <span class="user-name" id="topbarUserName">Staff</span>
+            <span class="user-date" id="topbarUserDate"></span>
+          </div>
+          <div class="user-avatar" id="topbarAvatar">ST</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page-section">
+        <div class="section-header">
+          <div class="section-title">Staff Dashboard</div>
+          <div class="section-subtitle">Violation encoding and receipt management</div>
+        </div>
+        <div class="stat-card-row" id="staffStats"></div>
+        <div class="content-card">
+          <div class="content-card-title" style="margin-bottom:16px;">Recent Violations (Today)</div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Violator</th><th>Plate</th><th>Violation</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="staffRecentBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENCODE VIOLATION -->
+      <div id="page-encode" class="page-section" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">Encode Violation</div>
+          <div class="section-subtitle">Record a new traffic violation</div>
+        </div>
+        <div class="content-card" style="max-width:800px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+            <div class="form-group">
+              <label class="form-label">Violator Full Name *</label>
+              <input type="text" class="form-control" id="evName"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">License Number *</label>
+              <input type="text" class="form-control" id="evLicense"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Plate Number *</label>
+              <input type="text" class="form-control" id="evPlate"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vehicle Type *</label>
+              <select class="form-control" id="evVehicle">
+                <option>Motorcycle</option><option>Sedan</option><option>SUV</option>
+                <option>Van</option><option>Tricycle</option><option>Jeepney</option>
+                <option>Bus</option><option>Truck</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Violation Type *</label>
+              <select class="form-control" id="evType" onchange="autoFillPenalty()"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Penalty (₱)</label>
+              <input type="number" class="form-control" id="evPenalty" min="0"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date *</label>
+              <input type="date" class="form-control" id="evDate"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time *</label>
+              <input type="time" class="form-control" id="evTime"/>
+            </div>
+            <div class="form-group" style="grid-column:span 2;">
+              <label class="form-label">Location *</label>
+              <input type="text" class="form-control" id="evLocation" placeholder="e.g. Quezon Avenue, Lucena City"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Enforcer ID</label>
+              <select class="form-control" id="evEnforcer"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notes</label>
+              <input type="text" class="form-control" id="evNotes" placeholder="Optional notes"/>
+            </div>
+          </div>
+          <div id="encodeError" class="auth-error" style="display:none;margin-top:12px;"></div>
+          <div style="display:flex;gap:12px;margin-top:20px;">
+            <button class="btn btn-primary" onclick="encodeViolation()">💾 Save Violation</button>
+            <button class="btn btn-outline" onclick="clearEncodeForm()">Clear Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIOLATION RECORDS (STAFF VIEW) -->
+      <div id="page-violations" class="page-section" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">Violation Records</div>
+          <div class="section-subtitle">View and manage encoded violations</div>
+        </div>
+        <div class="content-card" style="margin-bottom:16px;">
+          <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search violations..." id="staffViolationSearch" oninput="loadStaffViolations()"/>
+          </div>
+        </div>
+        <div class="content-card">
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Violator</th><th>Plate</th><th>Violation</th><th>Penalty</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="staffViolationsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- E-RECEIPTS -->
+      <div id="page-receipts" class="page-section" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">E-Receipts</div>
+          <div class="section-subtitle">Generate and print violation receipts</div>
+        </div>
+        <div class="content-card">
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Receipt ID</th><th>Violator</th><th>Violation</th><th>Penalty</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="receiptsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/staff.js"></script>
+</body>
+</html>

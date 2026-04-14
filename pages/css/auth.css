@@ -1,0 +1,321 @@
+/* ==============================================
+   auth.css — Login & Register Page Styles
+   Matches Figma: split-panel layout
+   ============================================== */
+
+/* ---------- Auth Body ---------- */
+.auth-body {
+  margin: 0;
+  padding: 0;
+  background: #f0f2f5;
+  min-height: 100vh;
+  font-family: var(--font-main);
+}
+
+/* ---------- Auth Container (2-column split) ---------- */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== FORM PANEL (white side) ===== */
+.auth-form-panel {
+  flex: 0 0 50%;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ===== HERO PANEL (dark background side) ===== */
+.auth-hero-panel {
+  flex: 0 0 50%;
+  position: relative;
+  overflow: hidden;
+  background: #0f1923;
+}
+
+/* Background image simulated with gradient + traffic light colors */
+.auth-hero-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,80,50,0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(255,184,0,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 80%, rgba(34,200,68,0.15) 0%, transparent 50%),
+    linear-gradient(160deg, #1a2535 0%, #0f1923 40%, #151e2a 100%);
+  z-index: 0;
+}
+
+/* Dark overlay on top of background */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 16, 24, 0.55);
+  z-index: 1;
+}
+
+/* Hero content centered */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+/* TMEO Seal wrapper */
+.tmeo-seal {
+  margin-bottom: 28px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+
+.seal-svg {
+  width: 160px;
+  height: 160px;
+}
+
+/* Hero title */
+.hero-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* Hero subtitle */
+.hero-subtitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #FFB800;
+  letter-spacing: 0.3px;
+}
+
+/* ===== AUTH FORM ELEMENTS ===== */
+
+/* Title */
+.auth-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+/* Subtitle */
+.auth-subtitle {
+  font-size: 15px;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Label above radio buttons */
+.auth-label {
+  font-size: 13px;
+  color: var(--text-medium);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ===== Role Radio Buttons ===== */
+.role-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.role-radio {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.role-radio input[type="radio"] {
+  display: none; /* Hide native radio */
+}
+
+/* Custom radio circle */
+.radio-circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #b0bec5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.radio-circle::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Show inner dot when checked */
+.role-radio input[type="radio"]:checked + .radio-circle {
+  border-color: var(--primary);
+}
+.role-radio input[type="radio"]:checked + .radio-circle::after {
+  opacity: 1;
+}
+
+.radio-text {
+  font-size: 14px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+/* ===== Input Fields ===== */
+.auth-input-group {
+  margin-bottom: 16px;
+}
+
+.auth-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #c8d0d8;
+  background: transparent;
+  padding: 10px 4px;
+  font-size: 14px;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.22s;
+}
+
+.auth-input::placeholder {
+  color: #a0aab4;
+  font-size: 14px;
+}
+
+.auth-input:focus {
+  border-bottom-color: var(--primary);
+}
+
+/* ===== Forgot Password ===== */
+.auth-forgot {
+  text-align: right;
+  margin-bottom: 24px;
+  margin-top: -4px;
+}
+.forgot-link {
+  font-size: 13px;
+  color: var(--text-light);
+  transition: color 0.2s;
+}
+.forgot-link:hover {
+  color: var(--primary);
+}
+
+/* ===== Login / Signup Button ===== */
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  transition: background 0.22s, transform 0.15s;
+}
+.auth-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+.auth-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== Switch Link (Login ↔ Register) ===== */
+.auth-switch {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-light);
+}
+.auth-link {
+  color: #3b5fc0;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.auth-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ===== Messages ===== */
+.auth-error {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  border-left: 3px solid #dc2626;
+}
+.auth-success {
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  border-left: 3px solid #16a34a;
+}
+
+/* ---------- Responsive: Stack on Mobile ---------- */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-hero-panel {
+    flex: none;
+    height: 280px;
+    order: -1; /* Hero on top on mobile */
+  }
+
+  .auth-form-panel {
+    flex: none;
+    padding: 32px 24px 40px;
+  }
+
+  .hero-title {
+    font-size: 22px;
+  }
+
+  .seal-svg {
+    width: 120px;
+    height: 120px;
+  }
+
+  .auth-title {
+    font-size: 26px;
+  }
+}

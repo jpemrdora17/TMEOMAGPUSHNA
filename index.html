@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="refresh" content="0; url=login.html"/>
+  <title>TMEO – Traffic Enforcement Management System</title>
+  <link rel="manifest" href="manifest.json"/>
+  <script>
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(() => console.log('[PWA] Service Worker registered'))
+        .catch(err => console.error('[PWA] SW registration failed:', err));
+    }
+    // Redirect to login
+    window.location.href = 'login.html';
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="login.html">Login</a>...</p>
+</body>
+</html>
